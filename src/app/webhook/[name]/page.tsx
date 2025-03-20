@@ -2,12 +2,14 @@ import { revalidateWebhook } from '@/actions/revalidate';
 import { prisma } from '@/lib/prisma';
 
 interface WebhookDetailsProps {
-  params: { name: string };
+  params: Promise<{ name: string }>;
 }
 
 export default async function WebhookDetails({ params }: WebhookDetailsProps) {
+  const { name } = await params;
+
   const webhook = await prisma.webhookReceived.findFirst({
-    where: { name: params.name },
+    where: { name: name },
   });
 
   if (!webhook) {
@@ -32,7 +34,7 @@ export default async function WebhookDetails({ params }: WebhookDetailsProps) {
       <form
         action={async () => {
           'use server';
-          await revalidateWebhook(params.name);
+          await revalidateWebhook(name);
         }}
       >
         <button

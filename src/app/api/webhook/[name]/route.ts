@@ -1,40 +1,41 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { prisma } from '@/lib/prisma';
 import { type NextRequest, NextResponse } from 'next/server';
-import { revalidatePath } from "next/cache"; 
+import { revalidatePath } from 'next/cache';
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { name: string } }
+  { params }: { params: Promise<{ name: string }> }
 ) {
-  return handleWebhook(request, params.name, 'POST');
+  return handleWebhook(request, (await params).name, 'POST');
 }
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { name: string } }
+  { params }: { params: Promise<{ name: string }> }
 ) {
-  return handleWebhook(request, params.name, 'GET');
+  return handleWebhook(request, (await params).name, 'GET');
 }
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { name: string } }
+  { params }: { params: Promise<{ name: string }> }
 ) {
-  return handleWebhook(request, params.name, 'PUT');
+  return handleWebhook(request, (await params).name, 'PUT');
 }
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { name: string } }
+  { params }: { params: Promise<{ name: string }> }
 ) {
-  return handleWebhook(request, params.name, 'PATCH');
+  return handleWebhook(request, (await params).name, 'PATCH');
 }
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { name: string } }
+  { params }: { params: Promise<{ name: string }> }
 ) {
-  return handleWebhook(request, params.name, 'DELETE');
+  return handleWebhook(request, (await params).name, 'DELETE');
 }
 
 async function handleWebhook(
@@ -53,7 +54,7 @@ async function handleWebhook(
     console.log('Webhook headers:', headers);
 
     // Get body
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     let body: any = null;
     try {
       const contentType = request.headers.get('content-type') || '';
