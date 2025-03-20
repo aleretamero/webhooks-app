@@ -14,10 +14,23 @@ datasource db {
 }
 
 model WebhookReceived {
-  id Int @id @default(autoincrement())
-  name String @unique
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  id        Int                      @id @default(autoincrement())
+  name      String                   @unique
+  createdAt DateTime                 @default(now()) @map("created_at")
+  updatedAt DateTime                 @default(now()) @updatedAt @map("updated_at")
+  histories WebhookReceivedHistory[]
 
   @@map("webhook_receiveds")
+}
+
+model WebhookReceivedHistory {
+  id                Int             @id @default(autoincrement())
+  webhookReceivedId Int             @map("webhook_received_id")
+  webhookReceived   WebhookReceived @relation(fields: [webhookReceivedId], references: [id])
+  method            String
+  body              String          @default("{}")
+  headers           String          @default("{}")
+  timestamp         DateTime        @default(now())
+
+  @@map("webhook_received_histories")
 }

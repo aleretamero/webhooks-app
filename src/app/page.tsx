@@ -4,13 +4,14 @@ import {
   deleteWebhook,
 } from '@/actions/webhook-received';
 import { prisma } from '@/lib/prisma';
+import Link from 'next/link';
 
 export default async function Home() {
   const webhooks = await prisma.webhookReceived.findMany();
 
   return (
     <main className="flex flex-col items-center p-10">
-      <div className="w-full max-w-md bg-gray-100 p-6 rounded-lg shadow-md">
+      <div className="w-full max-w-lg bg-gray-100 p-6 rounded-lg shadow-md">
         <h1 className="text-2xl font-bold mb-4">Gerenciar Webhooks</h1>
 
         <form
@@ -36,7 +37,7 @@ export default async function Home() {
           {webhooks.map((webhook) => (
             <li
               key={webhook.id}
-              className="flex justify-between items-center p-2 bg-white rounded shadow"
+              className="flex justify-between items-center p-2 bg-white rounded shadow gap-2"
             >
               <form
                 action={async (formData) => {
@@ -74,6 +75,13 @@ export default async function Home() {
                   Excluir
                 </button>
               </form>
+
+              <Link
+                href={`/webhook/${webhook.name}`}
+                className="bg-green-500 text-white p-2 rounded"
+              >
+                Go
+              </Link>
             </li>
           ))}
         </ul>
