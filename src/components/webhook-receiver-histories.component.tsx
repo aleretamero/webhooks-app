@@ -195,8 +195,8 @@ export function WebhookReceiverHistories({
               <div className="w-full flex justify-between items-center text-sm">
                 <div>
                   <span className="font-medium">Method:</span>{' '}
-                  <Badge className={getMethodColor(selectedRequest.method)}>
-                    {selectedRequest.method || 'UNKNOWN'}
+                  <Badge className={getMethodColor(selectedRequest?.method)}>
+                    {selectedRequest?.method || 'UNKNOWN'}
                   </Badge>
                 </div>
                 <div>
