@@ -1,9 +1,30 @@
+'use client';
+
 import {
   createWebhook,
   deleteWebhook,
-  updateWebhook,
+  // updateWebhook,
 } from '@/actions/webhook-received';
+import { Button, buttonVariants } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { PlusCircle, SquareArrowOutUpRight, Trash2 } from 'lucide-react';
 import Link from 'next/link';
+import { useActionState } from 'react';
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const formatDate = (timestamp: any) => {
+  return new Date(timestamp).toLocaleString();
+};
 
 interface WebhookRegistrationProps {
   webhooks: {
@@ -15,81 +36,107 @@ interface WebhookRegistrationProps {
 }
 
 export function WebhookRegistration({ webhooks }: WebhookRegistrationProps) {
+  const [, registerWebhookFormAction, registerWebhookPending] = useActionState(
+    createWebhook,
+    null
+  );
+  // const [, updateWebhookFormAction] = useActionState(updateWebhook, null);
+  const [, deleteWebhookFormAction] = useActionState(deleteWebhook, null);
+
   return (
-    <div className="w-full max-w-lg bg-gray-100 p-6 rounded-lg shadow-md">
-      <h1 className="text-2xl font-bold mb-4">Gerenciar Webhooks</h1>
-
-      <form
-        action={async (formData: FormData) => {
-          'use server';
-          await createWebhook(formData);
-        }}
-        className="flex gap-2 mb-4"
-      >
-        <input
-          type="text"
-          name="name"
-          placeholder="Nome do webhook"
-          required
-          className="flex-1 p-2 border rounded"
-        />
-        <button type="submit" className="bg-blue-500 text-white p-2 rounded">
-          Criar
-        </button>
-      </form>
-
-      <ul className="space-y-2">
-        {webhooks.map((webhook) => (
-          <li
-            key={webhook.id}
-            className="flex justify-between items-center p-2 bg-white rounded shadow gap-2"
-          >
-            <form
-              action={async (formData) => {
-                'use server';
-                await updateWebhook(webhook.id, formData);
-              }}
-              className="flex gap-2 w-full"
+    <div className="grid gap-6 md:grid-cols-[1fr_1.5fr]">
+      <Card className="shrink-0 h-56">
+        <CardHeader>
+          <CardTitle>Add New Webhook Path</CardTitle>
+          <CardDescription>Register a new webhook path</CardDescription>
+        </CardHeader>
+        <form className="space-y-4" action={registerWebhookFormAction}>
+          <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="url">Webhook path</Label>
+              <Input name="name" required placeholder="main" />
+            </div>
+          </CardContent>
+          <CardFooter>
+            <Button
+              type="submit"
+              disabled={registerWebhookPending}
+              className="w-full"
             >
-              <input type="hidden" name="id" value={webhook.id} />
-              <input
-                type="text"
-                name="name"
-                defaultValue={webhook.name}
-                className="flex-1 p-2 border rounded"
-              />
-              <button
-                type="submit"
-                className="bg-yellow-500 text-white p-2 rounded"
-              >
-                Editar
-              </button>
-            </form>
+              {registerWebhookPending ? 'Adding...' : 'Add Webhook'}
+              {!registerWebhookPending && (
+                <PlusCircle className="ml-2 h-4 w-4" />
+              )}
+            </Button>
+          </CardFooter>
+        </form>
+      </Card>
 
-            <form
-              action={async () => {
-                'use server';
-                await deleteWebhook(webhook.id);
-              }}
-            >
-              <input type="hidden" name="id" value={webhook.id} />
-              <button
-                type="submit"
-                className="bg-red-500 text-white p-2 rounded"
-              >
-                Excluir
-              </button>
-            </form>
+      <Card>
+        <CardHeader>
+          <CardTitle>Registered Webhooks</CardTitle>
+          <CardDescription>Manage your registered webhooks</CardDescription>
+        </CardHeader>
+        <CardContent>
+          {webhooks.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-8 text-center text-muted-foreground">
+              <p>No webhooks registered yet</p>
+              <p className="text-sm mt-1">
+                Add your first webhook using the form
+              </p>
+            </div>
+          ) : (
+            <ScrollArea>
+              <div className="max-h-96 space-y-3">
+                {webhooks.map((webhook) => (
+                  <div
+                    key={webhook.id}
+                    className="border rounded-lg p-4 space-y-3"
+                  >
+                    <div className="grid grid-cols-[auto_1fr] gap-x-2 text-sm">
+                      <span className="font-medium">Path:</span>
+                      <span className="truncate">{webhook.name}</span>
+                      <span className="font-medium">Created:</span>
+                      <span>{formatDate(webhook.createdAt)}</span>
+                    </div>
 
-            <Link
-              href={`/webhook/${webhook.name}`}
-              className="bg-green-500 text-white p-2 rounded"
-            >
-              Go
-            </Link>
-          </li>
-        ))}
-      </ul>
+                    <div className="flex gap-2 mt-4">
+                      <div className="flex items-center justify-between">
+                        <form
+                          action={() => deleteWebhookFormAction(webhook.id)}
+                        >
+                          <input type="hidden" name="id" value={webhook.id} />
+                          <Button
+                            size="sm"
+                            variant="destructive"
+                            className="cursor-pointer"
+                          >
+                            <Trash2 className="mr-2 h-3.5 w-3.5" />
+                            Remove
+                          </Button>
+                        </form>
+                      </div>
+
+                      <div className="flex items-center justify-between">
+                        <Link
+                          href={`/webhook/${webhook.name}`}
+                          className={buttonVariants({
+                            size: 'sm',
+                            variant: 'link',
+                          })}
+                        >
+                          <SquareArrowOutUpRight className="mr-2 h-3.5 w-3.5" />
+                          Go to
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </ScrollArea>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 }

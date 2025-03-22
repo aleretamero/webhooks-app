@@ -3,7 +3,10 @@
 import { prisma } from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
 
-export async function createWebhook(formData: FormData) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function createWebhook(prevState: any, formData: FormData) {
+  console.log('formData', formData);
+
   const name = formData.get('name') as string;
   if (!name) return;
 
@@ -11,10 +14,20 @@ export async function createWebhook(formData: FormData) {
   revalidatePath('/');
 }
 
-export async function updateWebhook(id: number, formData: FormData) {
+export async function updateWebhook(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  prevState: any,
+  {
+    id,
+    formData,
+  }: {
+    id: number;
+    formData: FormData;
+  }
+) {
   const name = formData.get('name') as string;
   if (!name) return;
-  
+
   await prisma.webhookReceived.update({
     where: { id },
     data: { name },
@@ -22,7 +35,16 @@ export async function updateWebhook(id: number, formData: FormData) {
   revalidatePath('/');
 }
 
-export async function deleteWebhook(id: number) {
-  await prisma.webhookReceived.delete({ where: { id } });
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function deleteWebhook(prevState: any, id: number) {
+  await prisma.$transaction([
+    prisma.webhookReceivedHistory.deleteMany({
+      where: { webhookReceivedId: id },
+    }),
+    prisma.webhookReceived.delete({
+      where: { id },
+    }),
+  ]);
+
   revalidatePath('/');
 }
