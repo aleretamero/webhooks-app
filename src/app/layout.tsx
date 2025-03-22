@@ -1,7 +1,9 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
-import { NavigationMenu } from '@/components/navigation-menu.component';
+// import { NavigationMenu } from '@/components/navigation-menu.component';
+import { Toaster } from '@/components/ui/sonner';
+import Link from 'next/link';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -29,12 +31,15 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <div className="container mx-auto py-6 px-4 md:px-6 max-w-6xl">
-          <h1 className="text-3xl font-bold mb-6">WebhookAPP</h1>
-          <div className="flex justify-center my-8">
+          <h1 className="text-3xl font-bold mb-6">
+            <Link href="/">WebhookAPP</Link>
+          </h1>
+          {/* <div className="flex justify-center my-8">
             <NavigationMenu />
-          </div>
+          </div> */}
           {children}
         </div>
+        <Toaster />
       </body>
     </html>
   );
