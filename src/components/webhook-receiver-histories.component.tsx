@@ -201,7 +201,7 @@ export function WebhookReceiverHistories({
                 </div>
                 <div>
                   <span className="font-medium">Received:</span>{' '}
-                  {formatDate(selectedRequest.timestamp)}
+                  {formatDate(selectedRequest?.timestamp)}
                 </div>
               </div>
             </CardHeader>
