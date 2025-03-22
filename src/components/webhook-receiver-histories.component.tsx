@@ -192,18 +192,20 @@ export function WebhookReceiverHistories({
             <CardHeader className="space-y-2">
               <CardTitle>Request Details</CardTitle>
 
-              <div className="w-full flex justify-between items-center text-sm">
-                <div>
-                  <span className="font-medium">Method:</span>{' '}
-                  <Badge className={getMethodColor(selectedRequest?.method)}>
-                    {selectedRequest?.method || 'UNKNOWN'}
-                  </Badge>
+              {selectedRequest && (
+                <div className="w-full flex justify-between items-center text-sm">
+                  <div>
+                    <span className="font-medium">Method:</span>{' '}
+                    <Badge className={getMethodColor(selectedRequest?.method)}>
+                      {selectedRequest?.method || 'UNKNOWN'}
+                    </Badge>
+                  </div>
+                  <div>
+                    <span className="font-medium">Received:</span>{' '}
+                    {formatDate(selectedRequest?.timestamp)}
+                  </div>
                 </div>
-                <div>
-                  <span className="font-medium">Received:</span>{' '}
-                  {formatDate(selectedRequest?.timestamp)}
-                </div>
-              </div>
+              )}
             </CardHeader>
 
             {selectedRequest ? (
