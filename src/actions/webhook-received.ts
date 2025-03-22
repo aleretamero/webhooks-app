@@ -48,3 +48,18 @@ export async function deleteWebhook(prevState: any, id: number) {
 
   revalidatePath('/');
 }
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function deleteWebhookHistories(prevState: any, id: number) {
+  const webhook = await prisma.webhookReceived.findUnique({
+    where: { id },
+  });
+
+  if (!webhook) return;
+
+  await prisma.webhookReceivedHistory.deleteMany({
+    where: { webhookReceivedId: id },
+  });
+
+  revalidatePath(`/webhook/${webhook.name}`);
+}

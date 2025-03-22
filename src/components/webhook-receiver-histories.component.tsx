@@ -1,6 +1,7 @@
 'use client';
 
 import { revalidateWebhook } from '@/actions/revalidate';
+import { deleteWebhookHistories } from '@/actions/webhook-received';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -14,7 +15,7 @@ import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast.hook';
 import { Copy, RefreshCw, Trash2 } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { startTransition, useActionState, useEffect, useState } from 'react';
 
 interface WebhookReceiverHistoriesProps {
   webhook: {
@@ -39,6 +40,10 @@ export function WebhookReceiverHistories({
 }: WebhookReceiverHistoriesProps) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [selectedRequest, setSelectedRequest] = useState<any>(null);
+  const [, deleteWebhookHistoriesAction, isPending] = useActionState(
+    deleteWebhookHistories,
+    null
+  );
   const [webhookUrl, setWebhookUrl] = useState('');
   const toast = useToast();
 
@@ -127,8 +132,10 @@ export function WebhookReceiverHistories({
           <Button
             variant="destructive"
             size="sm"
-            // onClick={() => setShowClearConfirm(true)}
-            // disabled={receivedWebhooks.length === 0}
+            onClick={() =>
+              startTransition(() => deleteWebhookHistoriesAction(webhook.id))
+            }
+            disabled={isPending || histories.length === 0}
           >
             <Trash2 className="h-4 w-4 mr-2" />
             Clear History
