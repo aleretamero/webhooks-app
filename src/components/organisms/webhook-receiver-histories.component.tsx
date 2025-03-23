@@ -56,11 +56,11 @@ type WebhookType = {
 };
 
 type WebhookHistoryType = {
-  body: string;
   id: number;
   webhookReceivedId: number;
   method: string;
-  headers: string;
+  headers: string | null;
+  body: string | null;
   timestamp: Date;
 };
 
@@ -229,16 +229,17 @@ export function WebhookReceiverHistories({
                   >
                     <ScrollArea className="flex-1 rounded-md border bg-muted/50">
                       <div className="p-4 max-h-[300px]">
-                        {Object.entries(
-                          JSON.parse(selectedRequest.headers) || {}
-                        ).map(([key, value]) => (
-                          <div key={key} className="mb-2">
-                            <div className="text-sm font-medium">{key}:</div>
-                            <div className="text-sm font-mono break-all">
-                              {value as string}
+                        {selectedRequest.headers &&
+                          Object.entries(
+                            JSON.parse(selectedRequest.headers)
+                          ).map(([key, value]) => (
+                            <div key={key} className="mb-2">
+                              <div className="text-sm font-medium">{key}:</div>
+                              <div className="text-sm font-mono break-all">
+                                {value as string}
+                              </div>
                             </div>
-                          </div>
-                        ))}
+                          ))}
                       </div>
                     </ScrollArea>
                   </TabsContent>
