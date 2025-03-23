@@ -14,7 +14,12 @@ import {
   CardTitle,
 } from '@/components/atoms/card';
 import { ScrollArea, ScrollBar } from '@/components/atoms/scroll-area';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/atoms/tabs';
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from '@/components/atoms/tabs';
 import { formatDate } from '@/utils/date.utils';
 import { useActionState, useEffect, useState } from 'react';
 
@@ -206,9 +211,11 @@ export function WebhookReceiverHistories({
                     className="flex-1 flex flex-col px-6 pt-2"
                   >
                     <ScrollArea className="flex-1 p-4 rounded-md border bg-muted/50">
-                      <pre className="text-sm font-mono max-h-[300px] max-w-[300px]">
-                        {formatJson(selectedRequest.body)}
-                      </pre>
+                      {selectedRequest.body && (
+                        <pre className="text-sm font-mono max-h-[300px] max-w-[300px]">
+                          {formatJson(selectedRequest.body)}
+                        </pre>
+                      )}
                       <ScrollBar orientation="horizontal" />
                     </ScrollArea>
                   </TabsContent>

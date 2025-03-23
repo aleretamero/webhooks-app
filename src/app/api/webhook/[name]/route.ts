@@ -92,8 +92,9 @@ async function handleWebhook(
       data: {
         webhookReceivedId: webhookReceived.id,
         method: method,
-        headers: JSON.stringify(headers),
-        body: JSON.stringify(body),
+        headers:
+          Object.keys(headers).length > 0 ? JSON.stringify(headers) : null,
+        body: Object.keys(body).length > 0 ? JSON.stringify(body) : null,
       },
     });
     console.log('Webhook data stored successfully');

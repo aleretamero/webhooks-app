@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE "webhook_received_histories" ALTER COLUMN "body" DROP NOT NULL,
+ALTER COLUMN "body" DROP DEFAULT,
+ALTER COLUMN "headers" DROP NOT NULL,
+ALTER COLUMN "headers" DROP DEFAULT;

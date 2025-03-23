@@ -28,8 +28,8 @@ model WebhookReceivedHistory {
   webhookReceivedId Int             @map("webhook_received_id")
   webhookReceived   WebhookReceived @relation(fields: [webhookReceivedId], references: [id])
   method            String
-  body              String          @default("{}")
-  headers           String          @default("{}")
+  body              String?
+  headers           String?
   timestamp         DateTime        @default(now())
 
   @@map("webhook_received_histories")
