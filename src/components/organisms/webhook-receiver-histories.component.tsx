@@ -121,7 +121,10 @@ export function WebhookReceiverHistories({
             toastDescription="Webhook history has been refreshed"
           />
           <DeleteButton
-            onClick={() => deleteWebhookHistoriesAction(webhook.id)}
+            onClick={() => {
+              deleteWebhookHistoriesAction(webhook.id);
+              setSelectedRequest(null);
+            }}
             title="Clear History"
             disabled={isPending || histories.length === 0}
             tooltip="Clear all webhook request history"
