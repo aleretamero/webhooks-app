@@ -9,12 +9,7 @@ import {
   AlertDialogTitle,
 } from '@/components/atoms/alert-dialog';
 import { Button } from '@/components/atoms/button';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/atoms/tooltip';
+import { Tooltip } from '@/components/molecules/tooltip.component';
 import { useToast } from '@/hooks/use-toast.hook';
 import { Trash2 } from 'lucide-react';
 import { useState } from 'react';
@@ -60,25 +55,21 @@ export function DeleteButton({
 
   return (
     <>
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              variant="destructive"
-              size="sm"
-              onClick={() => setShowConfirm(true)}
-              disabled={disabled}
-              className="disabled:cursor-not-allowed"
-            >
-              <Trash2 className="h-4 w-4 mr-2" />
-              {title}
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>{tooltip ?? title}</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+      <Tooltip
+        trigger={
+          <Button
+            variant="destructive"
+            size="sm"
+            onClick={() => setShowConfirm(true)}
+            disabled={disabled}
+            className="disabled:cursor-not-allowed"
+          >
+            <Trash2 className="h-4 w-4 mr-2" />
+            {title}
+          </Button>
+        }
+        tooltip={tooltip}
+      />
       <AlertDialog open={showConfirm} onOpenChange={setShowConfirm}>
         <AlertDialogContent>
           <AlertDialogHeader>

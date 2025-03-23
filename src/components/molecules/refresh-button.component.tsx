@@ -1,10 +1,5 @@
 import { Button } from '@/components/atoms/button';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/atoms/tooltip';
+import { Tooltip } from '@/components/molecules/tooltip.component';
 import { useToast } from '@/hooks/use-toast.hook';
 import { cn } from '@/lib/utils';
 import { RefreshCw } from 'lucide-react';
@@ -33,6 +28,7 @@ export function RefreshButton({
     onClick();
     setTimeout(() => {
       setRefreshing(false);
+      
       if (!toastTitle) return;
       toast.success({
         title: toastTitle,
@@ -42,22 +38,18 @@ export function RefreshButton({
   };
 
   return (
-    <TooltipProvider>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <Button variant="outline" size="sm" onClick={handleRefresh}>
-            <RefreshCw
-              className={cn(`h-4 w-4 mr-2`, {
-                'animate-spin': refreshing,
-              })}
-            />
-            {title}
-          </Button>
-        </TooltipTrigger>
-        <TooltipContent>
-          <p>{tooltip}</p>
-        </TooltipContent>
-      </Tooltip>
-    </TooltipProvider>
+    <Tooltip
+      trigger={
+        <Button variant="outline" size="sm" onClick={handleRefresh}>
+          <RefreshCw
+            className={cn(`h-4 w-4 mr-2`, {
+              'animate-spin': refreshing,
+            })}
+          />
+          {title}
+        </Button>
+      }
+      tooltip={tooltip}
+    />
   );
 }
