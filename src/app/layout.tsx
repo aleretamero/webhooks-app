@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
-// import { NavigationMenu } from '@/components/navigation-menu.component';
 import { Toaster } from '@/components/atoms/sonner';
 import Link from 'next/link';
 
@@ -30,13 +29,10 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <div className="container mx-auto py-6 px-4 md:px-6 max-w-6xl">
-          <h1 className="text-3xl font-bold mb-6">
+        <div className="container mx-auto p-4 md:px-6 max-w-6xl">
+          <h1 className="text-3xl font-bold">
             <Link href="/">WebhookAPP</Link>
           </h1>
-          {/* <div className="flex justify-center my-8">
-            <NavigationMenu />
-          </div> */}
           {children}
         </div>
         <Toaster />

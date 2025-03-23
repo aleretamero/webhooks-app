@@ -27,5 +27,9 @@ export default async function WebhookDetails({ params }: WebhookDetailsProps) {
     orderBy: { timestamp: 'desc' },
   });
 
-  return <WebhookReceiverHistories webhook={webhook} histories={histories} />;
+  return (
+    <main className="flex flex-col mt-10">
+      <WebhookReceiverHistories webhook={webhook} histories={histories} />
+    </main>
+  );
 }

@@ -5,7 +5,7 @@ export default async function Home() {
   const webhooks = await prisma.webhookReceived.findMany();
 
   return (
-    <main className="flex flex-col items-center p-10">
+    <main className="flex flex-col mt-10">
       <WebhookRegistration webhooks={webhooks} />
     </main>
   );
