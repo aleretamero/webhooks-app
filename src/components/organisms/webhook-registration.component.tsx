@@ -61,16 +61,21 @@ export function WebhookRegistration({ webhooks }: WebhookRegistrationProps) {
             </div>
           </CardContent>
           <CardFooter>
-            <Button
-              type="submit"
-              disabled={registerWebhookPending}
-              className="w-full"
-            >
-              {registerWebhookPending ? 'Adding...' : 'Add Webhook'}
-              {!registerWebhookPending && (
-                <PlusCircle className="ml-2 h-4 w-4" />
-              )}
-            </Button>
+            <Tooltip
+              trigger={
+                <Button
+                  type="submit"
+                  disabled={registerWebhookPending}
+                  className="w-full"
+                >
+                  {registerWebhookPending ? 'Adding...' : 'Add Webhook'}
+                  {!registerWebhookPending && (
+                    <PlusCircle className="ml-2 h-4 w-4" />
+                  )}
+                </Button>
+              }
+              tooltip="Add webhook path"
+            />
           </CardFooter>
         </form>
       </Card>
