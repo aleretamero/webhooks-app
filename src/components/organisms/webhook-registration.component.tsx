@@ -17,7 +17,8 @@ import {
 import { Input } from '@/components/atoms/input';
 import { Label } from '@/components/atoms/label';
 import { ScrollArea } from '@/components/atoms/scroll-area';
-import { PlusCircle, SquareArrowOutUpRight, Trash2 } from 'lucide-react';
+import { DeleteButton } from '@/components/molecules/trash-button.component';
+import { PlusCircle, SquareArrowOutUpRight } from 'lucide-react';
 import Link from 'next/link';
 import { useActionState } from 'react';
 
@@ -102,19 +103,17 @@ export function WebhookRegistration({ webhooks }: WebhookRegistrationProps) {
 
                     <div className="flex gap-2 mt-4">
                       <div className="flex items-center justify-between">
-                        <form
-                          action={() => deleteWebhookFormAction(webhook.id)}
-                        >
-                          <input type="hidden" name="id" value={webhook.id} />
-                          <Button
-                            size="sm"
-                            variant="destructive"
-                            className="cursor-pointer"
-                          >
-                            <Trash2 className="mr-2 h-3.5 w-3.5" />
-                            Remove
-                          </Button>
-                        </form>
+                        <DeleteButton
+                          onClick={() => deleteWebhookFormAction(webhook.id)}
+                          title="Remove"
+                          dialogTitle="Remove Webhook"
+                          dialogDescription="Are you sure you want to remove this webhook?"
+                          dialogActionText="Remove"
+                          dialogCancelText="Cancel"
+                          toastTitle="Webhook removed"
+                          toastDescription="The webhook has been removed successfully"
+                          tooltip="Remove webhook"
+                        />
                       </div>
 
                       <div className="flex items-center justify-between">
