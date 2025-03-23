@@ -19,14 +19,10 @@ import { Label } from '@/components/atoms/label';
 import { ScrollArea } from '@/components/atoms/scroll-area';
 import { Tooltip } from '@/components/molecules/tooltip.component';
 import { DeleteButton } from '@/components/molecules/trash-button.component';
+import { formatDate } from '@/utils/date.utils';
 import { PlusCircle, SquareArrowOutUpRight } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useActionState } from 'react';
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const formatDate = (timestamp: any) => {
-  return new Date(timestamp).toLocaleString();
-};
 
 interface WebhookRegistrationProps {
   webhooks: {
