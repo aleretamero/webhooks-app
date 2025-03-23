@@ -1,4 +1,4 @@
-import { WebhookReceiverHistories } from '@/components/webhook-receiver-histories.component';
+import { WebhookReceiverHistories } from '@/components/organisms/webhook-receiver-histories.component';
 import { prisma } from '@/lib/prisma';
 
 interface WebhookDetailsProps {

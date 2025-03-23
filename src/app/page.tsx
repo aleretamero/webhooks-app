@@ -1,4 +1,4 @@
-import { WebhookRegistration } from '@/components/webhook-registration.component';
+import { WebhookRegistration } from '@/components/organisms/webhook-registration.component';
 import { prisma } from '@/lib/prisma';
 
 export default async function Home() {

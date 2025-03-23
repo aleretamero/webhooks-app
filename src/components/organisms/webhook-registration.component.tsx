@@ -5,7 +5,7 @@ import {
   deleteWebhook,
   // updateWebhook,
 } from '@/actions/webhook-received';
-import { Button, buttonVariants } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/atoms/button';
 import {
   Card,
   CardContent,
@@ -13,10 +13,10 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { ScrollArea } from '@/components/ui/scroll-area';
+} from '@/components/atoms/card';
+import { Input } from '@/components/atoms/input';
+import { Label } from '@/components/atoms/label';
+import { ScrollArea } from '@/components/atoms/scroll-area';
 import { PlusCircle, SquareArrowOutUpRight, Trash2 } from 'lucide-react';
 import Link from 'next/link';
 import { useActionState } from 'react';

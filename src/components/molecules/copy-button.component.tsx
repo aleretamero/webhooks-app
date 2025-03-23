@@ -1,10 +1,10 @@
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/atoms/button';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '@/components/ui/tooltip';
+} from '@/components/atoms/tooltip';
 import { useToast } from '@/hooks/use-toast.hook';
 import { Copy } from 'lucide-react';
 

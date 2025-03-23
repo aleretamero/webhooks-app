@@ -9,7 +9,7 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
   navigationMenuTriggerStyle,
-} from '@/components/ui/navigation-menu';
+} from '@/components/atoms/navigation-menu';
 
 const components: Array<{ title: string; href: string }> = [
   {

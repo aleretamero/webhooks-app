@@ -7,14 +7,14 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
-import { Button } from '@/components/ui/button';
+} from '@/components/atoms/alert-dialog';
+import { Button } from '@/components/atoms/button';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '@/components/ui/tooltip';
+} from '@/components/atoms/tooltip';
 import { useToast } from '@/hooks/use-toast.hook';
 import { Trash2 } from 'lucide-react';
 import { useState } from 'react';

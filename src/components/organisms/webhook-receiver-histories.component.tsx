@@ -2,19 +2,19 @@
 
 import { revalidateWebhook } from '@/actions/revalidate';
 import { deleteWebhookHistories } from '@/actions/webhook-received';
-import { CopyButton } from '@/components/buttons/copy-button.component';
-import { RefreshButton } from '@/components/buttons/refresh-button.component';
-import { DeleteButton } from '@/components/buttons/trash-button.component';
-import { Badge } from '@/components/ui/badge';
+import { CopyButton } from '@/components/molecules/copy-button.component';
+import { RefreshButton } from '@/components/molecules/refresh-button.component';
+import { DeleteButton } from '@/components/molecules/trash-button.component';
+import { Badge } from '@/components/atoms/badge';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+} from '@/components/atoms/card';
+import { ScrollArea, ScrollBar } from '@/components/atoms/scroll-area';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/atoms/tabs';
 import { formatDate } from '@/utils/date.utils';
 import { useActionState, useEffect, useState } from 'react';
 
