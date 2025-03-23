@@ -2,8 +2,10 @@
 
 import { revalidateWebhook } from '@/actions/revalidate';
 import { deleteWebhookHistories } from '@/actions/webhook-received';
+import { CopyButton } from '@/components/buttons/copy-button.component';
+import { RefreshButton } from '@/components/buttons/refresh-button.component';
+import { DeleteButton } from '@/components/buttons/trash-button.component';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
@@ -13,85 +15,72 @@ import {
 } from '@/components/ui/card';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useToast } from '@/hooks/use-toast.hook';
-import { Copy, RefreshCw, Trash2 } from 'lucide-react';
-import { startTransition, useActionState, useEffect, useState } from 'react';
+import { formatDate } from '@/utils/date.utils';
+import { useActionState, useEffect, useState } from 'react';
+
+function getMethodColor(method: string) {
+  switch (method?.toUpperCase()) {
+    case 'GET':
+      return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300';
+    case 'POST':
+      return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300';
+    case 'PUT':
+      return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300';
+    case 'DELETE':
+      return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300';
+    default:
+      return 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300';
+  }
+}
+
+function formatJson(json: string) {
+  if (!json) return;
+
+  try {
+    return JSON.stringify(JSON.parse(json), null, 2);
+  } catch (error) {
+    console.error('Error parsing JSON:', error);
+  }
+}
+
+type WebhookType = {
+  name: string;
+  id: number;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+type WebhookHistoryType = {
+  body: string;
+  id: number;
+  webhookReceivedId: number;
+  method: string;
+  headers: string;
+  timestamp: Date;
+};
 
 interface WebhookReceiverHistoriesProps {
-  webhook: {
-    name: string;
-    id: number;
-    createdAt: Date;
-    updatedAt: Date;
-  };
-  histories: {
-    body: string;
-    id: number;
-    webhookReceivedId: number;
-    method: string;
-    headers: string;
-    timestamp: Date;
-  }[];
+  webhook: WebhookType;
+  histories: WebhookHistoryType[];
 }
 
 export function WebhookReceiverHistories({
   histories,
   webhook,
 }: WebhookReceiverHistoriesProps) {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [selectedRequest, setSelectedRequest] = useState<any>(null);
+  const [selectedRequest, setSelectedRequest] =
+    useState<WebhookHistoryType | null>(null);
   const [, deleteWebhookHistoriesAction, isPending] = useActionState(
     deleteWebhookHistories,
     null
   );
   const [webhookUrl, setWebhookUrl] = useState('');
-  const toast = useToast();
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
       setWebhookUrl(`${window.location.origin}/api/webhook/${webhook.name}`);
     }
   }, [webhook.name]);
-
-  const copyToClipboard = () => {
-    if (navigator.clipboard && webhookUrl) {
-      navigator.clipboard.writeText(webhookUrl);
-      toast.success({
-        title: 'Copied to clipboard',
-        description: 'Webhook URL copied to clipboard',
-      });
-    }
-  };
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const formatDate = (timestamp: any) => {
-    return new Date(timestamp).toLocaleString();
-  };
-
-  const formatJson = (json: string) => {
-    if (!json) return;
-
-    try {
-      return JSON.stringify(JSON.parse(json), null, 2);
-    } catch (error) {
-      console.error('Error parsing JSON:', error);
-    }
-  };
-
-  const getMethodColor = (method: string) => {
-    switch (method?.toUpperCase()) {
-      case 'GET':
-        return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300';
-      case 'POST':
-        return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300';
-      case 'PUT':
-        return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300';
-      case 'DELETE':
-        return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300';
-      default:
-        return 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300';
-    }
-  };
 
   return (
     <div className="space-y-6">
@@ -107,39 +96,37 @@ export function WebhookReceiverHistories({
             <div className="bg-muted p-2 rounded-md flex-1 overflow-x-auto text-sm font-mono">
               {webhookUrl || 'Loading URL...'}
             </div>
-            <Button variant="outline" size="icon" onClick={copyToClipboard}>
-              <Copy className="h-4 w-4" />
-            </Button>
+            <CopyButton
+              copyValue={webhookUrl}
+              tooltip="Copy Webhook URL to clipboard"
+              toastTitle="Copied Webhook URL"
+              toastDescription="Webhook URL copied to clipboard"
+            />
           </div>
         </CardContent>
-        {/* <CardFooter className="text-sm text-muted-foreground">
-          Send webhook requests to this URL to see them appear in the history
-          below.
-        </CardFooter> */}
       </Card>
 
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-bold">Webhook History</h2>
         <div className="flex space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
+          <RefreshButton
             onClick={() => revalidateWebhook(webhook.name)}
-          >
-            <RefreshCw className={`h-4 w-4 mr-2`} />
-            Refresh
-          </Button>
-          <Button
-            variant="destructive"
-            size="sm"
-            onClick={() =>
-              startTransition(() => deleteWebhookHistoriesAction(webhook.id))
-            }
+            tooltip="Refresh Webhook History"
+            toastTitle="Webhook History Refreshed"
+            toastDescription="Webhook history has been refreshed"
+          />
+          <DeleteButton
+            onClick={() => deleteWebhookHistoriesAction(webhook.id)}
+            title="Clear History"
             disabled={isPending || histories.length === 0}
-          >
-            <Trash2 className="h-4 w-4 mr-2" />
-            Clear History
-          </Button>
+            tooltip="Clear all webhook request history"
+            toastTitle="History Cleared"
+            toastDescription="Webhook history has been cleared"
+            dialogActionText="Clear History"
+            dialogCancelText="Cancel"
+            dialogTitle="Are you sure?"
+            dialogDescription="This will permanently delete all webhook request history."
+          />
         </div>
       </div>
 
@@ -257,23 +244,6 @@ export function WebhookReceiverHistories({
           </Card>
         </div>
       )}
-
-      {/* <AlertDialog open={showClearConfirm} onOpenChange={setShowClearConfirm}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-            <AlertDialogDescription>
-              This will permanently delete all webhook request history.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleClearHistory}>
-              Clear History
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog> */}
     </div>
   );
 }

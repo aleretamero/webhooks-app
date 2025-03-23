@@ -2,7 +2,7 @@ import { toast } from 'sonner';
 
 type ToastOptions = {
   title: string;
-  description: string;
+  description?: string;
   placement?:
     | 'top-left'
     | 'top-right'
