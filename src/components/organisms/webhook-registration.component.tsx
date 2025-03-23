@@ -5,7 +5,7 @@ import {
   deleteWebhook,
   // updateWebhook,
 } from '@/actions/webhook-received';
-import { Button, buttonVariants } from '@/components/atoms/button';
+import { Button } from '@/components/atoms/button';
 import {
   Card,
   CardContent,
@@ -17,9 +17,10 @@ import {
 import { Input } from '@/components/atoms/input';
 import { Label } from '@/components/atoms/label';
 import { ScrollArea } from '@/components/atoms/scroll-area';
+import { Tooltip } from '@/components/molecules/tooltip.component';
 import { DeleteButton } from '@/components/molecules/trash-button.component';
 import { PlusCircle, SquareArrowOutUpRight } from 'lucide-react';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useActionState } from 'react';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -43,6 +44,7 @@ export function WebhookRegistration({ webhooks }: WebhookRegistrationProps) {
   );
   // const [, updateWebhookFormAction] = useActionState(updateWebhook, null);
   const [, deleteWebhookFormAction] = useActionState(deleteWebhook, null);
+  const router = useRouter();
 
   return (
     <div className="grid gap-6 md:grid-cols-[1fr_1.5fr]">
@@ -117,16 +119,21 @@ export function WebhookRegistration({ webhooks }: WebhookRegistrationProps) {
                       </div>
 
                       <div className="flex items-center justify-between">
-                        <Link
-                          href={`/webhook/${webhook.name}`}
-                          className={buttonVariants({
-                            size: 'sm',
-                            variant: 'link',
-                          })}
-                        >
-                          <SquareArrowOutUpRight className="mr-2 h-3.5 w-3.5" />
-                          Go to
-                        </Link>
+                        <Tooltip
+                          trigger={
+                            <Button
+                              onClick={() =>
+                                router.push(`/webhook/${webhook.name}`)
+                              }
+                              size="sm"
+                              variant="link"
+                            >
+                              <SquareArrowOutUpRight className="mr-2 h-3.5 w-3.5" />
+                              Go to
+                            </Button>
+                          }
+                          tooltip="Go to webhook path"
+                        />
                       </div>
                     </div>
                   </div>
